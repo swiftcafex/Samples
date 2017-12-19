@@ -11,17 +11,18 @@ import UIKit
 class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
     var tableView: UITableView?
-    var tableItems = [
-        ("适配1", {
+    var tableItems: [(String, (UINavigationController, String) -> Void)] = [
+        ("适配1", { nav, title in
             
             var demo1 = Demo1ViewController()
-            
-            
-        }),
-        ("适配2", {
+            demo1.title = title
+            nav.pushViewController(demo1, animated: true)
             
         }),
-        ("适配3", {
+        ("适配2", { nav, title in
+            
+        }),
+        ("适配3", { nav, title in
             
         })
     ]
@@ -74,6 +75,18 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         cell.textLabel?.text = tableItems[indexPath.row].0
         
         return cell
+        
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        if let nav = self.navigationController {
+            
+            tableItems[indexPath.row].1(nav, tableItems[indexPath.row].0)
+            
+        }
+        
+        tableView.deselectRow(at: indexPath, animated: false)
         
     }
 
